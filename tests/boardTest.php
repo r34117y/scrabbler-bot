@@ -360,7 +360,7 @@ EOL;
       $this->assertTrue($lexicon->addWord($word), $word);
     }
 
-    $rack = str_split('ABCDEOG');
+    $rack = mb_str_split('ABCDEOG');
 
     // Check some basic failures
     // Not in the rack

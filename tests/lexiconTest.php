@@ -129,7 +129,7 @@ class LexiconTest extends PHPUnit_Framework_TestCase {
    */
   public function FindWordsEmpty($lexicon) {
     $board = new Board();
-    $moves = $lexicon->findWords($board, str_split('SSUBWA?'));
+    $moves = $lexicon->findWords($board, mb_str_split('SSUBWA?'));
     // Reduce Moves to Strings + Score
     array_walk($moves, function (&$move) { $move = (string) $move . ' ' . $move->score; });
     sort($moves);
@@ -158,7 +158,7 @@ class LexiconTest extends PHPUnit_Framework_TestCase {
     $board->play(Move::fromString('GOB 10H'));
 
     // Find next set of moves
-    $moves = $lexicon->findWords($board, str_split('UVWXYZ?'));
+    $moves = $lexicon->findWords($board, mb_str_split('UVWXYZ?'));
 
     // Reduce Moves to Strings + Score
     array_walk($moves, function (&$move) { $move = (string) $move . ' ' . $move->score; });
@@ -180,7 +180,7 @@ class LexiconTest extends PHPUnit_Framework_TestCase {
     $board->play(Move::fromString('SUBWAY A4'));
 
     // Find next set of moves
-    $moves = $lexicon->findWords($board, str_split('SUBWAYZ'));
+    $moves = $lexicon->findWords($board, mb_str_split('SUBWAYZ'));
 
     // Reduce Moves to Strings + Score
     array_walk($moves, function (&$move) { $move = (string) $move . ' ' . $move->score; });
@@ -202,7 +202,7 @@ class LexiconTest extends PHPUnit_Framework_TestCase {
     $board->play(Move::fromWord(10, 0, Move::DIR_DOWN, 'DOG'));
 
     // Find next set of moves
-    $moves = $lexicon->findWords($board, str_split('EDARMZG'));
+    $moves = $lexicon->findWords($board, mb_str_split('EDARMZG'));
 
     // Reduce Moves to Strings + Score
     array_walk($moves, function (&$move) { $move = (string) $move . ' ' . $move->score; });

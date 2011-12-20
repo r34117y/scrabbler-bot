@@ -157,7 +157,7 @@ class Move {
     $move->words = 1;
     $move->word = strtr($word, array(')' => '', '(' => ''));
     $move->len = strlen($move->word);
-    $move->tiles = str_split(preg_replace(array('/[a-z]+/','/\([A-Za-z?]+\)/'), array('?',''), $move->raw));
+    $move->tiles = mb_str_split(preg_replace(array('/[a-z]+/','/\([A-Za-z?]+\)/'), array('?',''), $move->raw));
     sort($move->tiles);
     $move->used = count($move->tiles);
     $move->score = 0;
@@ -178,7 +178,7 @@ class Move {
    */
   public static function fromTrade($letters = '') {
     $move = new Move(true);
-    $move->tiles = ($letters === '' ? array() : str_split($letters));
+    $move->tiles = ($letters === '' ? array() : mb_str_split($letters));
     $move->used = count($move->tiles);
     $move->score = 0;
     sort($move->tiles);
