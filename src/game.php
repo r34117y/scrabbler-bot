@@ -260,16 +260,16 @@ abstract class Game
         $this->log(self::LOG_DEBUG, 'Self Move: ' . $move . ' ' . $move->score);
         $this->log(self::LOG_DEBUG, PHP_EOL . $this->board);
 
-        // Remove tiles from rack and into bag
-        if ($move->is_trade) {
-            $this->bag = array_merge($move->tiles, $this->bag);
-            foreach ($move->tiles as $tile) {
-                $index = array_search($tile, $this->rack);
-                if ($index !== false) {
-                    array_splice($this->rack, $index, 1);
-                }
-            }
+    // Remove tiles from rack and into bag
+    if ($move->is_trade) {
+      $this->bag = array_merge($move->tiles, $this->bag);
+      foreach ($move->tiles as $tile) {
+        $i = array_search($tile, $this->rack);
+        if ($i !== false) {
+          unset($this->rack[$i]);
         }
+      }
+    }
 
         // Output
         return $move;
@@ -346,30 +346,30 @@ abstract class Game
                 // Play move
                 $board->play($move, $racks[$index]);
 
-                // Store Move
-                $previous[(int)!$index][1] = (string)$move;
+        // Store
+        $previous[(int)!$index][1] = (string) $move;
 
-                // Prevent trading <7 tiles
-                if ($move->is_trade && $move->used > 0 && count($bag) < 7) {
-                    throw new Exception('Unable to Trade while bag contains ' . count($bag) . ' tiles - need 7+');
-                }
+        // Pick new letters
+        shuffle($bag);
+        if ($move->used > count($bag)) {
+          $move->used = count($bag);
+        }
+        $previous[$index][0] = implode('', array_splice($bag, 0, $move->used));
 
-                // Pick new letters
-                shuffle($bag);
-                $remove = min($move->used, count($bag));
-                $previous[$index][0] = implode('', array_splice($bag, 0, $remove));
+        // Trade letters
+        if ($move->is_trade) {
+          $bag = array_merge($move->tiles, $bag);
+          foreach ($move->tiles as $tile) {
+            $i = array_search($tile, $racks[$index]);
+            if ($i !== false) {
+              unset($racks[$index][$i]);
+            }
+          }
 
-                // Put traded letters back in bag
-                if ($move->is_trade) {
-                    $bag = array_merge($move->tiles, $bag);
-                }
-
-                // Keep track of trades
-                if ($move->is_trade) {
-                    $trades++;
-                } else {
-                    $trades = 0;
-                }
+          $trades++;
+        } else {
+          $trades = 0;
+        }
 
                 // Add letters to internal rack
                 if (!empty($previous[$index][0])) {
